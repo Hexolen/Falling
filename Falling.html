@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr-TR">
+    <head>
+        <meta  http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Falling Ball</title>
+
+        
+        <script type="text/javascript" language="javascript">
+            var passedTime = 0;
+            var x = 0;
+            var hiz = 0;
+            var heightM = 10;
+            var y = heightM;
+            var widthM = 10;
+            var grav = 9.81;
+            var timer;
+            var V0 = 0;
+            var sure = 5;
+            var Vx = .7;
+
+            function transpose(xInM, yInM)
+            {
+                var p = new Object();
+                
+                p.realWidth = ((600 * xInM) / widthM);
+                p.realHeight = 600 - ((600 * yInM) / heightM);
+
+                return p;
+            }
+
+            function DrawCircle(pt)
+            {
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+                ctx.beginPath();
+                ctx.clearRect(0, 0, c.width, c.height);
+            
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "black";
+                ctx.arc(pt.realWidth, pt.realHeight, 25, 0, 2 * Math.PI);
+                ctx.fillStyle = "blue";
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function oynat()
+            {
+                var yol = (Vx * sure/1000);
+                x += yol;
+                var yol = (V0 * sure/1000) + (grav * ((sure/1000)*(sure/1000))/2);
+                hiz = V0 + grav * (sure/1000); 
+                V0 = hiz;
+                y -= yol;
+                var pt = transpose(x, y);
+                DrawCircle(pt);
+                if(pt.realHeight > 575 && V0 >= 0)
+                {
+                    console.log(hiz);
+                    if(V0 < 0.04)
+                    {
+                        clearInterval(timer);
+                    }else
+                    {
+                        V0 = -1 * V0 * 0.80;
+                    }
+                }
+            }
+        </script>
+    </head>
+    
+    <body>
+        <canvas id="canvas" width = "600" height="600" style="border: 1px solid black"></canvas>
+        <script>
+            timer = setInterval(function()
+            {
+                oynat();
+            }, sure);
+        </script>
+    </body>
+</html>
